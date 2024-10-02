@@ -1,0 +1,28 @@
+### Get All Students
+GET http://localhost:8080/academics/api/student
+Accept: application/json
+
+### Create A New Student
+POST http://localhost:8080/academics/api/student
+Content-Type: application/json
+
+{
+"email": "2222184@ipleiria.pt",
+"name": "Diogo Abegão",
+"username": "2222184",
+"password": "123456789",
+"courseCode": 9885
+}
+
+### Get All Courses
+GET http://localhost:8080/academics/api/course
+Accept: application/json
+
+### Create A New Course
+POST http://localhost:8080/academics/api/course
+Content-Type: application/json
+
+{
+  "code": "9123",
+  "name": "Engenharia Mecânica"
+}
