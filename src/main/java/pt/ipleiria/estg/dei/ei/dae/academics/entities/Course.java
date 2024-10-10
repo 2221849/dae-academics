@@ -28,6 +28,8 @@ public class Course {
     private String name;
     @OneToMany(mappedBy = "course")
     private List<Student> students;
+    @OneToMany
+    private List<Subject> subjects;
     // </editor-fold>
 
     // <editor-fold desc="Constructors">
@@ -35,6 +37,7 @@ public class Course {
         this.code = code;
         this.name = name;
         this.students = new ArrayList<>();
+        this.subjects = new ArrayList<>();
     }
 
     public Course() {
@@ -42,7 +45,7 @@ public class Course {
     }
     // </editor-fold>
 
-    // <editor-fold desc="Getters"> and Setters
+    // <editor-fold desc="Getters and Setters">
     public long getCode() {
         return code;
     }
@@ -66,6 +69,14 @@ public class Course {
     public void setStudents(List<Student> students) {
         this.students = students;
     }
+
+    public List<Subject> getSubjects() {
+        return subjects;
+    }
+
+    public void setSubjects(List<Subject> subjects) {
+        this.subjects = subjects;
+    }
     // </editor-fold>
 
     // <editor-fold desc="Methods">
@@ -75,6 +86,14 @@ public class Course {
 
     public void removeStudent(Student student) {
         students.remove(student);
+    }
+
+    public void addSubject(Subject subject) {
+        subjects.add(subject);
+    }
+
+    public void removeSubject(Subject subject) {
+        subjects.remove(subject);
     }
     // </editor-fold>
 }

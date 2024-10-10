@@ -26,3 +26,9 @@ Content-Type: application/json
   "code": "9123",
   "name": "Engenharia Mecânica"
 }
+
+### Get Student by Username
+GET http://localhost:8080/academics/api/student/2221849
+
+### Get Student Subjects by Username
+GET http://localhost:8080/academics/api/student/2221849/subjects

@@ -24,8 +24,14 @@ public class CourseBean {
     public Course find(long code) {
         var course = entityManager.find(Course.class, code);
         if (course == null){
-            throw new RuntimeException("course " + course + " not found");
+            throw new RuntimeException("course with code " + code + " not found");
         }
+        return course;
+    }
+
+    public Course remove(long code) {
+        var course = entityManager.find(Course.class, code);
+        entityManager.remove(course);
         return course;
     }
 }
