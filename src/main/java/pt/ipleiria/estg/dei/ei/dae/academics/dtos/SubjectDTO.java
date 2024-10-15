@@ -1,6 +1,4 @@
 package pt.ipleiria.estg.dei.ei.dae.academics.dtos;
-
-import pt.ipleiria.estg.dei.ei.dae.academics.entities.Course;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Subject;
 
 import java.util.List;
@@ -9,15 +7,23 @@ import java.util.stream.Collectors;
 public class SubjectDTO {
 
     // <editor-fold desc="Fields">
+
     private long code;
+
     private String name;
+
     private long courseCode;
+
     private String courseName;
+
     private int courseYear;
+
     private String scholarYear;
+
     // </editor-fold>
 
     // <editor-fold desc="Constructors">
+
     public SubjectDTO() {
     }
 
@@ -29,9 +35,11 @@ public class SubjectDTO {
         this.courseYear = courseYear;
         this.scholarYear = scholarYear;
     }
+
     // </editor-fold>
 
     // <editor-fold desc="Getters and Setters">
+
     public long getCode() {
         return code;
     }
@@ -79,9 +87,11 @@ public class SubjectDTO {
     public void setScholarYear(String scholarYear) {
         this.scholarYear = scholarYear;
     }
+
     // </editor-fold>
 
     // <editor-fold desc="Methods">
+
     public static SubjectDTO from(Subject subject) {
         return new SubjectDTO(
                 subject.getCode(),
@@ -96,5 +106,6 @@ public class SubjectDTO {
     public static List<SubjectDTO> from(List<Subject> subjects) {
         return subjects.stream().map(SubjectDTO::from).collect(Collectors.toList());
     }
+
     // </editor-fold>
 }

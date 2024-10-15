@@ -9,11 +9,15 @@ import java.util.stream.Collectors;
 public class CourseDTO implements Serializable {
 
     // <editor-fold desc="Fields">
+
     private long code;
+
     private String name;
+
     // </editor-fold>
 
     // <editor-fold desc="Constructors">
+
     public CourseDTO() {
     }
 
@@ -21,9 +25,11 @@ public class CourseDTO implements Serializable {
         this.code = code;
         this.name = name;
     }
+
     // </editor-fold>
 
     // <editor-fold desc="Getters and Setters">
+
     public long getCode() {
         return code;
     }
@@ -39,9 +45,11 @@ public class CourseDTO implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+
     // </editor-fold>
 
     // <editor-fold desc="Methods">
+
     public static CourseDTO from(Course course) {
         return new CourseDTO(
                 course.getCode(),
@@ -52,5 +60,6 @@ public class CourseDTO implements Serializable {
     public static List<CourseDTO> from(List<Course> courses) {
         return courses.stream().map(CourseDTO::from).collect(Collectors.toList());
     }
+
     // </editor-fold>
 }

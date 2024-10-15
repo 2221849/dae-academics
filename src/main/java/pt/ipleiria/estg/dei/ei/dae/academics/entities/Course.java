@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(
@@ -22,17 +23,23 @@ import java.util.List;
 public class Course {
 
     // <editor-fold desc="Fields">
+
     @Id
     private long code;
+
     @NotNull
     private String name;
+
     @OneToMany(mappedBy = "course")
     private List<Student> students;
+
     @OneToMany
     private List<Subject> subjects;
+
     // </editor-fold>
 
     // <editor-fold desc="Constructors">
+
     public Course(long code, String name) {
         this.code = code;
         this.name = name;
@@ -43,9 +50,11 @@ public class Course {
     public Course() {
         students = new ArrayList<>();
     }
+
     // </editor-fold>
 
     // <editor-fold desc="Getters and Setters">
+
     public long getCode() {
         return code;
     }
@@ -77,9 +86,11 @@ public class Course {
     public void setSubjects(List<Subject> subjects) {
         this.subjects = subjects;
     }
+
     // </editor-fold>
 
     // <editor-fold desc="Methods">
+
     public void addStudent(Student student) {
         students.add(student);
     }
@@ -95,5 +106,19 @@ public class Course {
     public void removeSubject(Subject subject) {
         subjects.remove(subject);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Course course = (Course) o;
+        return code == course.code;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(code);
+    }
+
     // </editor-fold>
 }

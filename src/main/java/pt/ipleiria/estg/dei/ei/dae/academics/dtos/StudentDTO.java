@@ -9,15 +9,23 @@ import java.util.stream.Collectors;
 public class StudentDTO implements Serializable {
     
     // <editor-fold desc="Fields">
+
     private String username;
+
     private String password;
+
     private String name;
+
     private String email;
+
     private long courseCode;
+
     private String courseName;
+
     // </editor-fold>
 
     // <editor-fold desc="Constructors">
+
     public StudentDTO() {
     }
 
@@ -29,9 +37,11 @@ public class StudentDTO implements Serializable {
         this.courseCode = courseCode;
         this.courseName = courseName;
     }
+
     // </editor-fold>
 
     // <editor-fold desc="Getters and Setters">
+
     public String getUsername() {
         return username;
     }
@@ -79,9 +89,11 @@ public class StudentDTO implements Serializable {
     public void setCourseName(String courseName) {
         this.courseName = courseName;
     }
+
     // </editor-fold>
 
     // <editor-fold desc="Methods">
+
     // Converts an entity Student to a DTO Student class
     public static StudentDTO from(Student student) {
         return new StudentDTO(
@@ -98,5 +110,6 @@ public class StudentDTO implements Serializable {
     public static List<StudentDTO> from(List<Student> students) {
         return students.stream().map(StudentDTO::from).collect(Collectors.toList());
     }
+
     // </editor-fold>
 }

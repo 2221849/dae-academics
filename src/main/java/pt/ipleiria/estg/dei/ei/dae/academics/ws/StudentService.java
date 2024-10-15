@@ -15,6 +15,7 @@ import java.util.List;
 @Produces({MediaType.APPLICATION_JSON}) // injects header “Content-Type: application/json”
 @Consumes({MediaType.APPLICATION_JSON}) // injects header “Accept: application/json”
 public class StudentService {
+
     @EJB
     private StudentBean studentBean;
 

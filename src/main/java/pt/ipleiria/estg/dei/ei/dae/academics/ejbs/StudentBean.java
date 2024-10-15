@@ -13,6 +13,7 @@ import java.util.List;
 
 @Stateless
 public class StudentBean {
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -43,7 +44,7 @@ public class StudentBean {
         var student = entityManager.find(Student.class, username);
         var subject = entityManager.find(Subject.class, code);
 
-        if (student.getCourse().getCode() == subject.getCourse().getCode()) {
+        if (student.getCourse().equals(subject.getCourse())) {
             subject.addStudent(student);
             student.addSubject(subject);
         }

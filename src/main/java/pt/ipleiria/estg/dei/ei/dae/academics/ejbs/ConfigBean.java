@@ -8,12 +8,21 @@ import jakarta.ejb.Startup;
 @Startup
 @Singleton
 public class ConfigBean {
+
     @EJB
     private StudentBean studentBean;
+
     @EJB
     private CourseBean courseBean;
+
     @EJB
     private SubjectBean subjectBean;
+
+    @EJB
+    private AdministratorBean administratorBean;
+
+    @EJB
+    private TeacherBean teacherBean;
 
     @PostConstruct
     public void populateDB() {
@@ -55,5 +64,11 @@ public class ConfigBean {
         studentBean.enrollStudentInSubject("2221849", 178);
         studentBean.enrollStudentInSubject("2221849", 191);
         studentBean.enrollStudentInSubject("2221849", 24);
+
+        administratorBean.create("admin", "123456789", "Administrator", "admin@my.ipleiria.pt");
+
+        teacherBean.create("carlos.j.ferreira", "123456789", "Carlos Ferreira", "carlos.j.ferreira@my.ipleiria.pt", "????");
+
+        teacherBean.create("dulce.goncalves", "123456789", "Dulce Gonçalves", "dulce.goncalves@my.ipleiria.pt", "????");
     }
 }
