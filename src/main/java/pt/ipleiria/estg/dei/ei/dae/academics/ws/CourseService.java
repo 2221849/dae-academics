@@ -14,6 +14,7 @@ import java.util.List;
 @Produces({MediaType.APPLICATION_JSON})
 @Consumes({MediaType.APPLICATION_JSON})
 public class CourseService {
+
     @EJB
     private CourseBean courseBean;
 

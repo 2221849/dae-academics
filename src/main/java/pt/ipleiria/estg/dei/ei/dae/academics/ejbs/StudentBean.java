@@ -13,6 +13,7 @@ import java.util.List;
 
 @Stateless
 public class StudentBean {
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -34,7 +35,7 @@ public class StudentBean {
     public Student find(String username) {
         var student = entityManager.find(Student.class, username);
         if (student == null) {
-            throw new RuntimeException("student " + student + " not found");
+            throw new RuntimeException("student " + username + " not found");
         }
         return student;
     }
@@ -43,7 +44,7 @@ public class StudentBean {
         var student = entityManager.find(Student.class, username);
         var subject = entityManager.find(Subject.class, code);
 
-        if (student.getCourse().getCode() == subject.getCourse().getCode()) {
+        if (student.getCourse().equals(subject.getCourse())) {
             subject.addStudent(student);
             student.addSubject(subject);
         }

@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="EntryPointsManager">
+    <list size="2">
+      <item index="0" class="java.lang.String" itemvalue="jakarta.ejb.Startup" />
+      <item index="1" class="java.lang.String" itemvalue="jakarta.ws.rs.ext.Provider" />
+    </list>
+    <writeAnnotations>
+      <writeAnnotation name="jakarta.ejb.EJB" />
+    </writeAnnotations>
+  </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="MavenProjectsManager">
     <option name="originalFiles">
