@@ -14,7 +14,6 @@ import java.util.List;
                 query = "SELECT s FROM Student s ORDER BY s.name" // JPQL
         )
 })
-
 public class Student extends User implements Serializable{
 
     // <editor-fold desc="Fields">

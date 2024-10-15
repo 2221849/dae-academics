@@ -24,6 +24,13 @@ public class CourseService {
         return CourseDTO.from(courseBean.findAll());
     }
 
+    @GET
+    @Path("{code}")
+    public Response getStudent(@PathParam("code") long code) {
+        var course = courseBean.find(code);
+        return Response.ok(CourseDTO.from(course)).build();
+    }
+
     @POST
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)

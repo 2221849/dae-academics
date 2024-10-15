@@ -2,11 +2,19 @@ package pt.ipleiria.estg.dei.ei.dae.academics.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllTeachers",
+                query = "SELECT t FROM Teacher t ORDER BY t.username" // JPQL
+        )
+})
 public class Teacher extends User {
 
     // <editor-fold desc="Fields">
@@ -50,4 +58,17 @@ public class Teacher extends User {
     }
 
     // </editor-fold>
+
+    // <editor-fold desc="Methods">
+
+    public void addSubject(Subject subject) {
+        this.subjects.add(subject);
+    }
+
+    public void removeSubject(Subject subject) {
+        this.subjects.remove(subject);
+    }
+
+    // </editor-fold>
+
 }

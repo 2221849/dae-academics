@@ -25,6 +25,20 @@ public class StudentService {
         return StudentDTO.from(studentBean.findAll());
     }
 
+    @GET
+    @Path("{username}")
+    public Response getStudent(@PathParam("username") String username) {
+        var student = studentBean.find(username);
+        return Response.ok(StudentDTO.from(student)).build();
+    }
+
+    @GET
+    @Path("{username}/subjects")
+    public Response getStudentSubjects(@PathParam("username") String username) {
+        var student = studentBean.findWithSubjects(username);
+        return Response.ok(SubjectDTO.from(student.getSubjects())).build();
+    }
+
     @POST
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -42,17 +56,14 @@ public class StudentService {
                 .build();
     }
 
-    @GET
-    @Path("{username}")
-    public Response getStudent(@PathParam("username") String username) {
-        var student = studentBean.find(username);
-        return Response.ok(StudentDTO.from(student)).build();
-    }
-
-    @GET
-    @Path("{username}/subjects")
-    public Response getStudentSubjects(@PathParam("username") String username) {
-        var student = studentBean.findWithSubjects(username);
-        return Response.ok(SubjectDTO.from(student.getSubjects())).build();
+    @DELETE
+    @Path("/{username}")
+    public Response removeStudent(@PathParam("username") String username) {
+        Student removedStudent = studentBean.remove(username);
+        if (removedStudent != null) {
+            return Response.ok(StudentDTO.from(removedStudent)).build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
     }
 }

@@ -40,6 +40,18 @@ public class StudentBean {
         return student;
     }
 
+    public Student findWithSubjects(String username) {
+        var student = this.find(username);
+        Hibernate.initialize(student.getSubjects());
+        return student;
+    }
+
+    public Student remove(String username) {
+        var student = entityManager.find(Student.class, username);
+        entityManager.remove(student);
+        return student;
+    }
+
     public void enrollStudentInSubject(String username, long code) {
         var student = entityManager.find(Student.class, username);
         var subject = entityManager.find(Subject.class, code);
@@ -50,9 +62,11 @@ public class StudentBean {
         }
     }
 
-    public Student findWithSubjects(String username) {
-        var student = this.find(username);
-        Hibernate.initialize(student.getSubjects());
-        return student;
+    public void unrollStudentFromSubject(String username, long code) {
+        var student = entityManager.find(Student.class, username);
+        var subject = entityManager.find(Subject.class, code);
+
+        student.removeSubject(subject);
+        subject.removeStudent(student);
     }
 }

@@ -1,13 +1,12 @@
 package pt.ipleiria.estg.dei.ei.dae.academics.dtos;
 
-import pt.ipleiria.estg.dei.ei.dae.academics.entities.Student;
+import pt.ipleiria.estg.dei.ei.dae.academics.entities.Teacher;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class StudentDTO implements Serializable {
-    
+public class TeacherDTO {
+
     // <editor-fold desc="Fields">
 
     private String username;
@@ -18,22 +17,22 @@ public class StudentDTO implements Serializable {
 
     private String email;
 
-    private long courseCode;
+    private String office;
 
     // </editor-fold>
 
     // <editor-fold desc="Constructors">
 
     @SuppressWarnings("unused")
-    public StudentDTO() {
+    public TeacherDTO() {
     }
 
-    public StudentDTO(String username, String password, String name, String email, long courseCode) {
+    public TeacherDTO(String username, String password, String name, String email, String office) {
         this.username = username;
         this.password = password;
         this.name = name;
         this.email = email;
-        this.courseCode = courseCode;
+        this.office = office;
     }
 
     // </editor-fold>
@@ -72,33 +71,32 @@ public class StudentDTO implements Serializable {
         this.email = email;
     }
 
-    public long getCourseCode() {
-        return courseCode;
+    public String getOffice() {
+        return office;
     }
 
-    public void setCourseCode(long courseCode) {
-        this.courseCode = courseCode;
+    public void setOffice(String office) {
+        this.office = office;
     }
 
     // </editor-fold>
 
     // <editor-fold desc="Methods">
 
-    // Converts an entity Student to a DTO Student class
-    public static StudentDTO from(Student student) {
-        return new StudentDTO(
-                student.getUsername(),
-                student.getPassword(),
-                student.getName(),
-                student.getEmail(),
-                student.getCourse().getCode()
+    public static TeacherDTO from(Teacher teacher) {
+        return new TeacherDTO(
+                teacher.getUsername(),
+                teacher.getPassword(),
+                teacher.getName(),
+                teacher.getEmail(),
+                teacher.getOffice()
         );
     }
 
-    // Converts an entire list of entities into a list of DTOs
-    public static List<StudentDTO> from(List<Student> students) {
-        return students.stream().map(StudentDTO::from).collect(Collectors.toList());
+    public static List<TeacherDTO> from(List<Teacher> teachers) {
+        return teachers.stream().map(TeacherDTO::from).collect(Collectors.toList());
     }
 
     // </editor-fold>
+
 }

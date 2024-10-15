@@ -18,6 +18,7 @@ public class CourseDTO implements Serializable {
 
     // <editor-fold desc="Constructors">
 
+    @SuppressWarnings("unused")
     public CourseDTO() {
     }
 

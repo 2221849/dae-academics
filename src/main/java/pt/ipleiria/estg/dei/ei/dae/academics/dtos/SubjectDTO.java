@@ -13,28 +13,26 @@ public class SubjectDTO implements Serializable {
 
     private String name;
 
-    private long courseCode;
-
-    private String courseName;
+    private String scholarYear;
 
     private int courseYear;
 
-    private String scholarYear;
+    private long courseCode;
 
     // </editor-fold>
 
     // <editor-fold desc="Constructors">
 
+    @SuppressWarnings("unused")
     public SubjectDTO() {
     }
 
-    public SubjectDTO(long code, String name, long courseCode, String courseName, int courseYear, String scholarYear) {
+    public SubjectDTO(long code, String name, String scholarYear, int courseYear, long courseCode) {
         this.code = code;
         this.name = name;
-        this.courseCode = courseCode;
-        this.courseName = courseName;
-        this.courseYear = courseYear;
         this.scholarYear = scholarYear;
+        this.courseYear = courseYear;
+        this.courseCode = courseCode;
     }
 
     // </editor-fold>
@@ -57,20 +55,12 @@ public class SubjectDTO implements Serializable {
         this.name = name;
     }
 
-    public long getCourseCode() {
-        return courseCode;
+    public String getScholarYear() {
+        return scholarYear;
     }
 
-    public void setCourseCode(long courseCode) {
-        this.courseCode = courseCode;
-    }
-
-    public String getCourseName() {
-        return courseName;
-    }
-
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
+    public void setScholarYear(String scholarYear) {
+        this.scholarYear = scholarYear;
     }
 
     public int getCourseYear() {
@@ -81,12 +71,12 @@ public class SubjectDTO implements Serializable {
         this.courseYear = courseYear;
     }
 
-    public String getScholarYear() {
-        return scholarYear;
+    public long getCourseCode() {
+        return courseCode;
     }
 
-    public void setScholarYear(String scholarYear) {
-        this.scholarYear = scholarYear;
+    public void setCourseCode(long courseCode) {
+        this.courseCode = courseCode;
     }
 
     // </editor-fold>
@@ -97,10 +87,9 @@ public class SubjectDTO implements Serializable {
         return new SubjectDTO(
                 subject.getCode(),
                 subject.getName(),
-                subject.getCourse().getCode(),
-                subject.getCourse().getName(),
+                subject.getSchoolYear(),
                 subject.getCourseYear(),
-                subject.getSchoolYear()
+                subject.getCourse().getCode()
         );
     }
 

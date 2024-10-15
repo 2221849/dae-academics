@@ -1,34 +1,108 @@
-### Get All Students
+// Student Requests
+
+### Retrieve All Students
 GET http://localhost:8080/academics/api/student
 Accept: application/json
 
-### Create A New Student
+### Add New Student
 POST http://localhost:8080/academics/api/student
 Content-Type: application/json
 
 {
-"email": "2222184@ipleiria.pt",
-"name": "Diogo Abegão",
-"username": "2222184",
-"password": "123456789",
-"courseCode": 9885
+  "username": "2222184",
+  "password": "123456789",
+  "name": "Diogo Abegão",
+  "email": "2222184@ipleiria.pt",
+  "courseCode": 9885
 }
 
-### Get All Courses
+### Retrieve Student Details
+GET http://localhost:8080/academics/api/student/2222184
+Accept: application/json
+
+### Delete Student
+DELETE http://localhost:8080/academics/api/student/2222184
+
+### Retrieve Student's Subjects
+GET http://localhost:8080/academics/api/student/2221842/subjects
+
+// Course Requests
+
+### Retrieve All Courses
 GET http://localhost:8080/academics/api/course
 Accept: application/json
 
-### Create A New Course
+### Add New Course
 POST http://localhost:8080/academics/api/course
 Content-Type: application/json
 
 {
   "code": "9123",
-  "name": "Engenharia Mecânica"
+  "name": "Licenciatura em Engenharia Mecânica (D)"
 }
 
-### Get Student by Username
-GET http://localhost:8080/academics/api/student/2221849
+### Retrieve Course Details
+GET http://localhost:8080/academics/api/course/9123
+Accept: application/json
 
-### Get Student Subjects by Username
-GET http://localhost:8080/academics/api/student/2221849/subjects
+### Delete Course
+DELETE http://localhost:8080/academics/api/course/9123
+
+// Subject Requests
+
+### Retrieve All Subjects
+GET http://localhost:8080/academics/api/subject
+Accept: application/json
+
+### Add New Subject
+POST http://localhost:8080/academics/api/subject
+Content-Type: application/json
+
+{
+  "code": 210002,
+  "name": "Matemática Gerais",
+  "scholarYear": "2022-23",
+  "courseYear": 1,
+  "courseCode": 2100
+}
+
+### Retrieve Subject Details
+GET http://localhost:8080/academics/api/subject/210002
+Accept: application/json
+
+### Delete Subject
+DELETE http://localhost:8080/academics/api/subject/210002
+
+### Retrieve Students Enrolled in Subject
+GET http://localhost:8080/academics/api/subject/37/students
+
+### Retrive Teachers Associated to a Subject
+GET http://localhost:8080/academics/api/subject/37/teachers
+
+// Teacher Requests
+
+### Retrieve All Teachers
+GET http://localhost:8080/academics/api/teacher
+Accept: application/json
+
+### Add New Teacher
+POST http://localhost:8080/academics/api/teacher/
+Content-Type: application/json
+
+{
+  "username": "dulce.goncalves",
+  "password": 123456789,
+  "name": "Dulce Goncalves",
+  "email": "dulce.goncalves@my.ipleiria.pt",
+  "office": "????"
+}
+
+### Retrieve Teacher Details
+GET http://localhost:8080/academics/api/teacher/dulce.goncalves
+Accept: application/json
+
+### Delete Teacher
+DELETE http://localhost:8080/academics/api/teacher/dulce.goncalves
+
+### Retrieve Subjects Teacher Is Associated To
+GET http://localhost:8080/academics/api/teacher/carlos.j.ferreira/subjects
