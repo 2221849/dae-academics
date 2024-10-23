@@ -86,7 +86,7 @@ GET http://localhost:8080/academics/api/teacher
 Accept: application/json
 
 ### Add New Teacher
-POST http://localhost:8080/academics/api/teacher/
+POST http://localhost:8080/academics/api/teacher
 Content-Type: application/json
 
 {

@@ -29,9 +29,6 @@ public class ConfigBean {
 
         // <editor-fold desc="Courses">
 
-        courseBean.create(2, "UCs comuns a vários cursos (ESTG)");
-        courseBean.create(1000, "Ensino Generalizado do Inglês");
-        courseBean.create(2100, "Matemáticas Gerais");
         courseBean.create(9119, "Licenciatura em Engenharia Informática (D)");
         courseBean.create(9885, "Licenciatura em Engenharia Informática (PL)");
 
@@ -92,9 +89,7 @@ public class ConfigBean {
         teacherBean.create("carlos.j.ferreira", "123456789", "Carlos Ferreira", "carlos.j.ferreira@my.ipleiria.pt", "????");
 
         teacherBean.associateTeacherToSubject("carlos.j.ferreira",9119218);
-
         teacherBean.associateTeacherToSubject("carlos.j.ferreira",37);
-
         teacherBean.dissociateTeacherFromSubject("carlos.j.ferreira",9119218);
 
         // </editor-fold>

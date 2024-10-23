@@ -28,8 +28,10 @@ public class StudentService {
     @GET
     @Path("{username}")
     public Response getStudent(@PathParam("username") String username) {
-        var student = studentBean.find(username);
-        return Response.ok(StudentDTO.from(student)).build();
+        var student = studentBean.findWithSubjects(username);
+        var studentDTO = StudentDTO.from(student);
+        studentDTO.setSubjects(SubjectDTO.from(student.getSubjects()));
+        return Response.ok(studentDTO).build();
     }
 
     @GET
