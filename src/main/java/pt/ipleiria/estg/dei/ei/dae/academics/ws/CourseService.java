@@ -7,6 +7,8 @@ import jakarta.ws.rs.core.Response;
 import pt.ipleiria.estg.dei.ei.dae.academics.dtos.CourseDTO;
 import pt.ipleiria.estg.dei.ei.dae.academics.ejbs.CourseBean;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Course;
+import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityExistsException;
+import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityNotFoundException;
 
 import java.util.List;
 
@@ -26,7 +28,7 @@ public class CourseService {
 
     @GET
     @Path("{code}")
-    public Response getStudent(@PathParam("code") long code) {
+    public Response getCourse(@PathParam("code") long code) throws MyEntityNotFoundException {
         var course = courseBean.find(code);
         return Response.ok(CourseDTO.from(course)).build();
     }
@@ -34,7 +36,7 @@ public class CourseService {
     @POST
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createNewCourse(CourseDTO courseDTO) {
+    public Response createNewCourse(CourseDTO courseDTO) throws MyEntityExistsException, MyEntityNotFoundException {
         courseBean.create(
                 courseDTO.getCode(),
                 courseDTO.getName()
@@ -45,12 +47,8 @@ public class CourseService {
 
     @DELETE
     @Path("/{code}")
-    public Response removeCourse(@PathParam("code") long code) {
+    public Response removeCourse(@PathParam("code") long code) throws MyEntityNotFoundException {
         Course removedCourse = courseBean.remove(code);
-        if (removedCourse != null) {
-            return Response.ok(CourseDTO.from(removedCourse)).build();
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
+        return Response.ok(CourseDTO.from(removedCourse)).build();
     }
 }

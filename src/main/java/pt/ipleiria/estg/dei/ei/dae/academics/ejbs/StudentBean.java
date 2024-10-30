@@ -4,10 +4,13 @@ import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
+import jakarta.validation.ConstraintViolationException;
 import org.hibernate.Hibernate;
-import pt.ipleiria.estg.dei.ei.dae.academics.entities.Course;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Student;
-import pt.ipleiria.estg.dei.ei.dae.academics.entities.Subject;
+import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyConstraintViolationException;
+import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityExistsException;
+import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityNotFoundException;
 
 import java.util.List;
 
@@ -18,43 +21,67 @@ public class StudentBean {
     private EntityManager entityManager;
 
     @EJB
-    private CourseBean courseBean;  // Inject CourseBean here
+    private CourseBean courseBean;
 
-    public void create(String username, String password, String name, String email, long code) {
-        Course course = courseBean.find(code);
-        var student = new Student(username, password, name, email, course);
-        course.addStudent(student);
-        entityManager.persist(student);
+    @EJB
+    private SubjectBean subjectBean;
+
+    public boolean exists(String username) {
+        Query query = entityManager.createQuery(
+                "SELECT COUNT(s.username) FROM Student s WHERE s.username = :username",
+                Long.class
+        );
+        query.setParameter("username", username);
+        return (Long) query.getSingleResult() > 0L;
+    }
+
+    public void create(String username, String password, String name, String email, long code) throws MyEntityExistsException, MyEntityNotFoundException, MyConstraintViolationException {
+        if (exists(username)) {
+            throw new MyEntityExistsException("Student with username '" + username + "' already exists");
+        }
+
+        var course = courseBean.find(code);
+
+        try {
+            var student = new Student(username, password, name, email, course);
+            course.addStudent(student);
+            entityManager.persist(student);
+            entityManager.flush(); // when using Hibernate, to force it to throw a ConstraintViolationException, as in the JPA specification
+        } catch (ConstraintViolationException e) {
+            throw new MyConstraintViolationException(e);
+        }
     }
 
     public List<Student> findAll() {
-        // remember, maps to: “SELECT s FROM Student s ORDER BY s.name”
         return entityManager.createNamedQuery("getAllStudents", Student.class).getResultList();
     }
 
-    public Student find(String username) {
+    public Student find(String username) throws MyEntityNotFoundException {
         var student = entityManager.find(Student.class, username);
         if (student == null) {
-            throw new RuntimeException("student " + username + " not found");
+            throw new MyEntityNotFoundException("Student with username '" + username + "' not found");
         }
         return student;
     }
 
-    public Student findWithSubjects(String username) {
+    public Student findWithSubjects(String username) throws MyEntityNotFoundException {
         var student = this.find(username);
         Hibernate.initialize(student.getSubjects());
         return student;
     }
 
-    public Student remove(String username) {
-        var student = entityManager.find(Student.class, username);
+    public Student remove(String username) throws MyEntityNotFoundException {
+        var student = this.find(username);
         entityManager.remove(student);
+        if (entityManager.find(Student.class, username) != null) {
+            throw new MyEntityNotFoundException("Student with username '" + username + "' not removed");
+        }
         return student;
     }
 
-    public void enrollStudentInSubject(String username, long code) {
-        var student = entityManager.find(Student.class, username);
-        var subject = entityManager.find(Subject.class, code);
+    public void enrollStudentInSubject(String username, long code) throws MyEntityNotFoundException {
+        var student = this.find(username);
+        var subject = subjectBean.find(code);
 
         if (student.getCourse().equals(subject.getCourse())) {
             subject.addStudent(student);
@@ -62,9 +89,9 @@ public class StudentBean {
         }
     }
 
-    public void unrollStudentFromSubject(String username, long code) {
-        var student = entityManager.find(Student.class, username);
-        var subject = entityManager.find(Subject.class, code);
+    public void unrollStudentFromSubject(String username, long code) throws MyEntityNotFoundException {
+        var student = this.find(username);
+        var subject = subjectBean.find(code);
 
         student.removeSubject(subject);
         subject.removeStudent(student);

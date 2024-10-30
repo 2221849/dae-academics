@@ -1,33 +1,36 @@
 package pt.ipleiria.estg.dei.ei.dae.academics.ws;
 
+import jakarta.ejb.EJB;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import pt.ipleiria.estg.dei.ei.dae.academics.dtos.StudentDTO;
 import pt.ipleiria.estg.dei.ei.dae.academics.dtos.SubjectDTO;
 import pt.ipleiria.estg.dei.ei.dae.academics.ejbs.StudentBean;
-import jakarta.ejb.EJB;
-import jakarta.ws.rs.core.MediaType;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Student;
+import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyConstraintViolationException;
+import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityExistsException;
+import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityNotFoundException;
 
 import java.util.List;
 
-@Path("student") // relative url web path for this service
-@Produces({MediaType.APPLICATION_JSON}) // injects header “Content-Type: application/json”
-@Consumes({MediaType.APPLICATION_JSON}) // injects header “Accept: application/json”
+@Path("student")
+@Produces({MediaType.APPLICATION_JSON})
+@Consumes({MediaType.APPLICATION_JSON})
 public class StudentService {
 
     @EJB
     private StudentBean studentBean;
 
-    @GET // means: to call this endpoint, we need to use the HTTP GET method
-    @Path("/") // means: the relative url path is “/api/student/”
+    @GET
+    @Path("/")
     public List<StudentDTO> getAllStudents() {
         return StudentDTO.from(studentBean.findAll());
     }
 
     @GET
     @Path("{username}")
-    public Response getStudent(@PathParam("username") String username) {
+    public Response getStudent(@PathParam("username") String username) throws MyEntityNotFoundException {
         var student = studentBean.findWithSubjects(username);
         var studentDTO = StudentDTO.from(student);
         studentDTO.setSubjects(SubjectDTO.from(student.getSubjects()));
@@ -36,7 +39,7 @@ public class StudentService {
 
     @GET
     @Path("{username}/subjects")
-    public Response getStudentSubjects(@PathParam("username") String username) {
+    public Response getStudentSubjects(@PathParam("username") String username) throws MyEntityNotFoundException {
         var student = studentBean.findWithSubjects(username);
         return Response.ok(SubjectDTO.from(student.getSubjects())).build();
     }
@@ -44,7 +47,7 @@ public class StudentService {
     @POST
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createNewStudent (StudentDTO studentDTO){
+    public Response createNewStudent(StudentDTO studentDTO) throws MyEntityNotFoundException, MyEntityExistsException, MyConstraintViolationException {
         studentBean.create(
                 studentDTO.getUsername(),
                 studentDTO.getPassword(),
@@ -53,19 +56,13 @@ public class StudentService {
                 studentDTO.getCourseCode()
         );
         Student newStudent = studentBean.find(studentDTO.getUsername());
-        return Response.status(Response.Status.CREATED)
-                .entity(StudentDTO.from(newStudent))
-                .build();
+        return Response.status(Response.Status.CREATED).entity(StudentDTO.from(newStudent)).build();
     }
 
     @DELETE
     @Path("/{username}")
-    public Response removeStudent(@PathParam("username") String username) {
+    public Response removeStudent(@PathParam("username") String username) throws MyEntityNotFoundException {
         Student removedStudent = studentBean.remove(username);
-        if (removedStudent != null) {
-            return Response.ok(StudentDTO.from(removedStudent)).build();
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
+        return Response.ok(StudentDTO.from(removedStudent)).build();
     }
 }

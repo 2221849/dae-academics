@@ -59,19 +59,19 @@ POST http://localhost:8080/academics/api/subject
 Content-Type: application/json
 
 {
-  "code": 210002,
-  "name": "Matemática Gerais",
+  "code": 9885202,
+  "name": "Álgebra Linear",
   "scholarYear": "2022-23",
   "courseYear": 1,
-  "courseCode": 2100
+  "courseCode": 9885
 }
 
 ### Retrieve Subject Details
-GET http://localhost:8080/academics/api/subject/210002
+GET http://localhost:8080/academics/api/subject/9885202
 Accept: application/json
 
 ### Delete Subject
-DELETE http://localhost:8080/academics/api/subject/210002
+DELETE http://localhost:8080/academics/api/subject/9885202
 
 ### Retrieve Students Enrolled in Subject
 GET http://localhost:8080/academics/api/subject/37/students
@@ -106,3 +106,59 @@ DELETE http://localhost:8080/academics/api/teacher/dulce.goncalves
 
 ### Retrieve Subjects Teacher Is Associated To
 GET http://localhost:8080/academics/api/teacher/carlos.j.ferreira/subjects
+
+// Exception Testing
+
+### Attempt to Add a New Student (Entity With That Username Already Exists)
+POST http://localhost:8080/academics/api/student
+Content-Type: application/json
+
+{
+  "username": "2221849",
+  "password": "123456789",
+  "name": "Marcelo Santos",
+  "email": "2221849@ipleiria.pt",
+  "courseCode": 9885
+}
+
+### Attempt to Retrieve a Student That Does Not Exist
+GET http://localhost:8080/academics/api/student/2220000
+Accept: application/json
+
+### Attempt to Delete a Student That Does Not Exist
+DELETE http://localhost:8080/academics/api/course/2220000
+
+### Attempt to Add a New Course (Entity With That Code Already Exists)
+POST http://localhost:8080/academics/api/course
+Content-Type: application/json
+
+{
+  "code": "9119",
+  "name": "Engenharia Informática (D)"
+}
+
+### Attempt to Retrieve a Course That Does Not Exist
+GET http://localhost:8080/academics/api/course/9999
+Accept: application/json
+
+### Attempt to Delete a Course That Does Not Exist
+DELETE http://localhost:8080/academics/api/course/9999
+
+### Attempt to Add a New Subject (Entity With That Code Already Exists)
+POST http://localhost:8080/academics/api/subject
+Content-Type: application/json
+
+{
+  "code": 37,
+  "name": "Desenvolvimento de Aplicações Empresariais",
+  "scholarYear": "2024-25",
+  "courseYear": 3,
+  "courseCode": 9119
+}
+
+### Attempt to Retrieve a Subject That Does Not Exist
+GET http://localhost:8080/academics/api/subject/1234567
+Accept: application/json
+
+### Attempt to Delete a Subject That Does Not Exist
+DELETE http://localhost:8080/academics/api/subject/7654321

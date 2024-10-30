@@ -8,6 +8,8 @@ import pt.ipleiria.estg.dei.ei.dae.academics.dtos.SubjectDTO;
 import pt.ipleiria.estg.dei.ei.dae.academics.dtos.TeacherDTO;
 import pt.ipleiria.estg.dei.ei.dae.academics.ejbs.TeacherBean;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Teacher;
+import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityExistsException;
+import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityNotFoundException;
 
 import java.util.List;
 
@@ -15,7 +17,6 @@ import java.util.List;
 @Produces({MediaType.APPLICATION_JSON})
 @Consumes({MediaType.APPLICATION_JSON})
 public class TeacherService {
-
     @EJB
     private TeacherBean teacherBean;
 
@@ -27,14 +28,14 @@ public class TeacherService {
 
     @GET
     @Path("{username}")
-    public Response getTeacher(@PathParam("username") String username) {
+    public Response getTeacher(@PathParam("username") String username) throws MyEntityNotFoundException {
         var teacher = teacherBean.find(username);
         return Response.ok(TeacherDTO.from(teacher)).build();
     }
 
     @GET
     @Path("{username}/subjects")
-    public Response getTeacherSubjects(@PathParam("username") String username) {
+    public Response getTeacherSubjects(@PathParam("username") String username) throws MyEntityNotFoundException {
         var teacher = teacherBean.findWithSubjects(username);
         return Response.ok(SubjectDTO.from(teacher.getSubjects())).build();
     }
@@ -42,7 +43,7 @@ public class TeacherService {
     @POST
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createNewTeacher(TeacherDTO teacherDTO){
+    public Response createNewTeacher(TeacherDTO teacherDTO) throws MyEntityExistsException, MyEntityNotFoundException {
         teacherBean.create(
                 teacherDTO.getUsername(),
                 teacherDTO.getPassword(),
@@ -51,19 +52,13 @@ public class TeacherService {
                 teacherDTO.getOffice()
         );
         Teacher newTeacher = teacherBean.find(teacherDTO.getUsername());
-        return Response.status(Response.Status.CREATED)
-                .entity(TeacherDTO.from(newTeacher))
-                .build();
+        return Response.status(Response.Status.CREATED).entity(TeacherDTO.from(newTeacher)).build();
     }
 
     @DELETE
     @Path("/{username}")
-    public Response removeTeacher(@PathParam("username") String username) {
+    public Response removeTeacher(@PathParam("username") String username) throws MyEntityNotFoundException {
         Teacher removedTeacher = teacherBean.remove(username);
-        if (removedTeacher != null) {
-            return Response.ok(TeacherDTO.from(removedTeacher)).build();
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
+        return Response.ok(TeacherDTO.from(removedTeacher)).build();
     }
 }
