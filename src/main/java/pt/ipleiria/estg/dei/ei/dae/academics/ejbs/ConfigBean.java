@@ -100,9 +100,9 @@ public class ConfigBean {
 
         // <editor-fold desc="Administrators and Teachers">
 
-        administratorBean.create("admin", "123456789", "Administrator", "admin@my.ipleiria.pt");
-
         try {
+            administratorBean.create("admin", "123456789", "Administrator", "admin@my.ipleiria.pt");
+
             teacherBean.create("carlos.j.ferreira", "123456789", "Carlos Ferreira", "carlos.j.ferreira@my.ipleiria.pt", "????");
             teacherBean.associateTeacherToSubject("carlos.j.ferreira", 9119218);
             teacherBean.associateTeacherToSubject("carlos.j.ferreira", 37);
@@ -110,6 +110,7 @@ public class ConfigBean {
         } catch (Exception e) {
             logger.severe(e.getMessage());
         }
+
         // </editor-fold>
 
     }

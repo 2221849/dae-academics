@@ -27,7 +27,7 @@ public class CourseService {
     }
 
     @GET
-    @Path("{code}")
+    @Path("/{code}")
     public Response getCourse(@PathParam("code") long code) throws MyEntityNotFoundException {
         var course = courseBean.find(code);
         return Response.ok(CourseDTO.from(course)).build();
@@ -43,6 +43,17 @@ public class CourseService {
         );
         Course newCourse = courseBean.find(courseDTO.getCode());
         return Response.status(Response.Status.CREATED).entity(CourseDTO.from(newCourse)).build();
+    }
+
+    @PUT
+    @Path("/{code}")
+    public Response updateCourse(@PathParam("code") long code, CourseDTO courseDTO) throws MyEntityNotFoundException {
+        courseBean.update(
+                code,
+                courseDTO.getName()
+        );
+        Course updatedCourse = courseBean.find(code);
+        return Response.ok(CourseDTO.from(updatedCourse)).build();
     }
 
     @DELETE

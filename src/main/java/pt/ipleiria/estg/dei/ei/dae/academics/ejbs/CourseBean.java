@@ -5,7 +5,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Course;
-import pt.ipleiria.estg.dei.ei.dae.academics.entities.Subject;
 import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityNotFoundException;
 
@@ -45,6 +44,11 @@ public class CourseBean {
             throw new MyEntityNotFoundException("Course with code '" + code + "' not found");
         }
         return course;
+    }
+
+    public void update(long code, String name) throws MyEntityNotFoundException {
+        Course course = this.find(code);
+        course.setName(name);
     }
 
     public Course remove(long code) throws MyEntityNotFoundException {

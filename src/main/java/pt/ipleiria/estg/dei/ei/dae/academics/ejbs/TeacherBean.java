@@ -57,6 +57,15 @@ public class TeacherBean {
         return teacher;
     }
 
+    public void update(String username, String password, String name, String email, String office) throws MyEntityNotFoundException {
+        var teacher = this.find(username);
+
+        teacher.setPassword(password);
+        teacher.setName(name);
+        teacher.setEmail(email);
+        teacher.setOffice(office);
+    }
+
     public Teacher remove(String username) throws MyEntityNotFoundException {
         var teacher = this.find(username);
         entityManager.remove(teacher);

@@ -25,6 +25,9 @@ public class Subject {
 
     // <editor-fold desc="Fields">
 
+    @Version
+    private int version;
+
     @Id
     private long code;
 

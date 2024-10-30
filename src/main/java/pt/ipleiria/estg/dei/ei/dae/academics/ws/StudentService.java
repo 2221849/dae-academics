@@ -29,7 +29,7 @@ public class StudentService {
     }
 
     @GET
-    @Path("{username}")
+    @Path("/{username}")
     public Response getStudent(@PathParam("username") String username) throws MyEntityNotFoundException {
         var student = studentBean.findWithSubjects(username);
         var studentDTO = StudentDTO.from(student);
@@ -38,10 +38,24 @@ public class StudentService {
     }
 
     @GET
-    @Path("{username}/subjects")
+    @Path("/{username}/subjects")
     public Response getStudentSubjects(@PathParam("username") String username) throws MyEntityNotFoundException {
         var student = studentBean.findWithSubjects(username);
         return Response.ok(SubjectDTO.from(student.getSubjects())).build();
+    }
+
+    @PUT
+    @Path("/{username}")
+    public Response updateStudent(@PathParam("username") String username, StudentDTO studentDTO) throws MyEntityNotFoundException {
+        studentBean.update(
+                username,
+                studentDTO.getPassword(),
+                studentDTO.getName(),
+                studentDTO.getEmail(),
+                studentDTO.getCourseCode()
+        );
+        Student updatedStudent = studentBean.find(username);
+        return Response.ok(StudentDTO.from(updatedStudent)).build();
     }
 
     @POST

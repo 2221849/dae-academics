@@ -17,6 +17,9 @@ public class User {
 
     // <editor-fold desc="Fields">
 
+    @Version
+    private int version;
+
     @Id
     @NotBlank(message = "Username cannot be blank")
     protected String username;

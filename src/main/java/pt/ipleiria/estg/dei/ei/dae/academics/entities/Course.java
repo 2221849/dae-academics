@@ -24,6 +24,9 @@ public class Course {
 
     // <editor-fold desc="Fields">
 
+    @Version
+    private int version;
+
     @Id
     private long code;
 

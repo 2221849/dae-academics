@@ -27,14 +27,14 @@ public class TeacherService {
     }
 
     @GET
-    @Path("{username}")
+    @Path("/{username}")
     public Response getTeacher(@PathParam("username") String username) throws MyEntityNotFoundException {
         var teacher = teacherBean.find(username);
         return Response.ok(TeacherDTO.from(teacher)).build();
     }
 
     @GET
-    @Path("{username}/subjects")
+    @Path("/{username}/subjects")
     public Response getTeacherSubjects(@PathParam("username") String username) throws MyEntityNotFoundException {
         var teacher = teacherBean.findWithSubjects(username);
         return Response.ok(SubjectDTO.from(teacher.getSubjects())).build();
@@ -53,6 +53,20 @@ public class TeacherService {
         );
         Teacher newTeacher = teacherBean.find(teacherDTO.getUsername());
         return Response.status(Response.Status.CREATED).entity(TeacherDTO.from(newTeacher)).build();
+    }
+
+    @PUT
+    @Path("/{username}")
+    public Response updateTeacher(@PathParam("username") String username, TeacherDTO teacherDTO) throws MyEntityNotFoundException, MyEntityExistsException {
+        teacherBean.update(
+                username,
+                teacherDTO.getPassword(),
+                teacherDTO.getName(),
+                teacherDTO.getEmail(),
+                teacherDTO.getOffice()
+        );
+        Teacher updatedTeacher = teacherBean.find(username);
+        return Response.ok(TeacherDTO.from(updatedTeacher)).build();
     }
 
     @DELETE

@@ -67,6 +67,15 @@ public class SubjectBean {
         return subject;
     }
 
+    public void update(long code, String name, String schoolYear, int courseYear, long courseCode) throws MyEntityNotFoundException {
+        var subject = this.find(code);
+
+        subject.setName(name);
+        subject.setSchoolYear(schoolYear);
+        subject.setCourseYear(courseYear);
+        subject.setCode(courseCode);
+    }
+
     public Subject remove(long code) throws MyEntityNotFoundException {
         var subject = this.find(code);
         entityManager.remove(subject);

@@ -1,8 +1,16 @@
 package pt.ipleiria.estg.dei.ei.dae.academics.entities;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllAdministrators",
+                query = "SELECT a FROM Administrator a ORDER BY a.username" // JPQL
+        )
+})
 public class Administrator extends User {
 
     public Administrator() {

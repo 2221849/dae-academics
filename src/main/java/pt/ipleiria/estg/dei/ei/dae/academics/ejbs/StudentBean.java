@@ -3,6 +3,7 @@ package pt.ipleiria.estg.dei.ei.dae.academics.ejbs;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import jakarta.validation.ConstraintViolationException;
@@ -46,7 +47,7 @@ public class StudentBean {
             var student = new Student(username, password, name, email, course);
             course.addStudent(student);
             entityManager.persist(student);
-            entityManager.flush(); // when using Hibernate, to force it to throw a ConstraintViolationException, as in the JPA specification
+            entityManager.flush();
         } catch (ConstraintViolationException e) {
             throw new MyConstraintViolationException(e);
         }
@@ -68,6 +69,21 @@ public class StudentBean {
         var student = this.find(username);
         Hibernate.initialize(student.getSubjects());
         return student;
+    }
+
+    public void update(String username, String password, String name, String email, long courseCode) throws MyEntityNotFoundException {
+        var student = this.find(username);
+
+        entityManager.lock(student, LockModeType.OPTIMISTIC);
+
+        student.setPassword(password);
+        student.setName(name);
+        student.setEmail(email);
+
+        if (student.getCourse().getCode() != courseCode) {
+            var course = courseBean.find(courseCode);
+            student.setCourse(course);
+        }
     }
 
     public Student remove(String username) throws MyEntityNotFoundException {

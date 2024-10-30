@@ -1,3 +1,4 @@
+
 // Student Requests
 
 ### Retrieve All Students
@@ -11,6 +12,17 @@ Content-Type: application/json
 {
   "username": "2222184",
   "password": "123456789",
+  "name": "Diogo Abegão",
+  "email": "2222184@ipleiria.pt",
+  "courseCode": 9885
+}
+
+### Update Student Details
+PUT http://localhost:8080/academics/api/student/2222184
+Content-Type: application/json
+
+{
+  "password": "newpassword123",
   "name": "Diogo Abegão",
   "email": "2222184@ipleiria.pt",
   "courseCode": 9885
@@ -41,6 +53,14 @@ Content-Type: application/json
   "name": "Licenciatura em Engenharia Mecânica (D)"
 }
 
+### Update Course Details
+PUT http://localhost:8080/academics/api/course/9123
+Content-Type: application/json
+
+{
+  "name": "Licenciatura em Engenharia Mecânica - Updated"
+}
+
 ### Retrieve Course Details
 GET http://localhost:8080/academics/api/course/9123
 Accept: application/json
@@ -66,6 +86,17 @@ Content-Type: application/json
   "courseCode": 9885
 }
 
+### Update Subject Details
+PUT http://localhost:8080/academics/api/subject/9885202
+Content-Type: application/json
+
+{
+  "name": "Álgebra Linear Avançada",
+  "scholarYear": "2023-24",
+  "courseYear": 1,
+  "courseCode": 9885
+}
+
 ### Retrieve Subject Details
 GET http://localhost:8080/academics/api/subject/9885202
 Accept: application/json
@@ -76,7 +107,7 @@ DELETE http://localhost:8080/academics/api/subject/9885202
 ### Retrieve Students Enrolled in Subject
 GET http://localhost:8080/academics/api/subject/37/students
 
-### Retrive Teachers Associated to a Subject
+### Retrieve Teachers Associated to a Subject
 GET http://localhost:8080/academics/api/subject/37/teachers
 
 // Teacher Requests
@@ -97,6 +128,17 @@ Content-Type: application/json
   "office": "????"
 }
 
+### Update Teacher Details
+PUT http://localhost:8080/academics/api/teacher/dulce.goncalves
+Content-Type: application/json
+
+{
+  "password": "newpassword987",
+  "name": "Dulce Goncalves",
+  "email": "dulce.goncalves@ipleiria.pt",
+  "office": "B-102"
+}
+
 ### Retrieve Teacher Details
 GET http://localhost:8080/academics/api/teacher/dulce.goncalves
 Accept: application/json
@@ -107,19 +149,41 @@ DELETE http://localhost:8080/academics/api/teacher/dulce.goncalves
 ### Retrieve Subjects Teacher Is Associated To
 GET http://localhost:8080/academics/api/teacher/carlos.j.ferreira/subjects
 
-// Exception Testing
+// Administrator Requests
 
-### Attempt to Add a New Student (Entity With That Username Already Exists)
-POST http://localhost:8080/academics/api/student
+### Retrieve All Administrators
+GET http://localhost:8080/academics/api/administrator
+Accept: application/json
+
+### Add New Administrator
+POST http://localhost:8080/academics/api/administrator
 Content-Type: application/json
 
 {
-  "username": "2221849",
-  "password": "123456789",
-  "name": "Marcelo Santos",
-  "email": "2221849@ipleiria.pt",
-  "courseCode": 9885
+  "username": "admin.jdoe",
+  "password": "adminpass123",
+  "name": "John Doe",
+  "email": "john.doe@ipleiria.pt"
 }
+
+### Update Administrator Details
+PUT http://localhost:8080/academics/api/administrator/admin.jdoe
+Content-Type: application/json
+
+{
+  "password": "newadminpass456",
+  "name": "John Doe Updated",
+  "email": "john.doe@ipleiria.pt"
+}
+
+### Retrieve Administrator Details
+GET http://localhost:8080/academics/api/administrator/admin.jdoe
+Accept: application/json
+
+### Delete Administrator
+DELETE http://localhost:8080/academics/api/administrator/admin.jdoe
+
+// Exception Testing
 
 ### Attempt to Retrieve a Student That Does Not Exist
 GET http://localhost:8080/academics/api/student/2220000
@@ -128,15 +192,6 @@ Accept: application/json
 ### Attempt to Delete a Student That Does Not Exist
 DELETE http://localhost:8080/academics/api/course/2220000
 
-### Attempt to Add a New Course (Entity With That Code Already Exists)
-POST http://localhost:8080/academics/api/course
-Content-Type: application/json
-
-{
-  "code": "9119",
-  "name": "Engenharia Informática (D)"
-}
-
 ### Attempt to Retrieve a Course That Does Not Exist
 GET http://localhost:8080/academics/api/course/9999
 Accept: application/json
@@ -144,21 +199,23 @@ Accept: application/json
 ### Attempt to Delete a Course That Does Not Exist
 DELETE http://localhost:8080/academics/api/course/9999
 
-### Attempt to Add a New Subject (Entity With That Code Already Exists)
-POST http://localhost:8080/academics/api/subject
-Content-Type: application/json
-
-{
-  "code": 37,
-  "name": "Desenvolvimento de Aplicações Empresariais",
-  "scholarYear": "2024-25",
-  "courseYear": 3,
-  "courseCode": 9119
-}
-
 ### Attempt to Retrieve a Subject That Does Not Exist
 GET http://localhost:8080/academics/api/subject/1234567
 Accept: application/json
 
 ### Attempt to Delete a Subject That Does Not Exist
 DELETE http://localhost:8080/academics/api/subject/7654321
+
+### Attempt to Retrieve a Teacher That Does Not Exist
+GET http://localhost:8080/academics/api/teacher/nonexistent.teacher
+Accept: application/json
+
+### Attempt to Delete a Teacher That Does Not Exist
+DELETE http://localhost:8080/academics/api/teacher/nonexistent.teacher
+
+### Attempt to Retrieve an Administrator That Does Not Exist
+GET http://localhost:8080/academics/api/administrator/nonexistent.admin
+Accept: application/json
+
+### Attempt to Delete an Administrator That Does Not Exist
+DELETE http://localhost:8080/academics/api/administrator/nonexistent.admin
