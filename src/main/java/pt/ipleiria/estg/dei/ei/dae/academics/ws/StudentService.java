@@ -1,11 +1,14 @@
 package pt.ipleiria.estg.dei.ei.dae.academics.ws;
 
 import jakarta.ejb.EJB;
+import jakarta.mail.MessagingException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import pt.ipleiria.estg.dei.ei.dae.academics.dtos.EmailDTO;
 import pt.ipleiria.estg.dei.ei.dae.academics.dtos.StudentDTO;
 import pt.ipleiria.estg.dei.ei.dae.academics.dtos.SubjectDTO;
+import pt.ipleiria.estg.dei.ei.dae.academics.ejbs.EmailBean;
 import pt.ipleiria.estg.dei.ei.dae.academics.ejbs.StudentBean;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Student;
 import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyConstraintViolationException;
@@ -21,6 +24,9 @@ public class StudentService {
 
     @EJB
     private StudentBean studentBean;
+
+    @EJB
+    private EmailBean emailBean;
 
     @GET
     @Path("/")
@@ -78,5 +84,13 @@ public class StudentService {
     public Response removeStudent(@PathParam("username") String username) throws MyEntityNotFoundException {
         Student removedStudent = studentBean.remove(username);
         return Response.ok(StudentDTO.from(removedStudent)).build();
+    }
+
+    @POST
+    @Path("/{username}/email")
+    public Response sendEmail(@PathParam("username") String username, EmailDTO email) throws MyEntityNotFoundException, MessagingException {
+        Student student = studentBean.find(username);
+        emailBean.send(student.getEmail(), email.getSubject(), email.getBody());
+        return Response.status(Response.Status.OK).entity("E-mail sent").build();
     }
 }

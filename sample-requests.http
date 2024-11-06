@@ -219,3 +219,14 @@ Accept: application/json
 
 ### Attempt to Delete an Administrator That Does Not Exist
 DELETE http://localhost:8080/academics/api/administrator/nonexistent.admin
+
+// Email Testing
+
+### Test Email
+POST http://localhost:8080/academics/api/student/2221868/email
+Content-Type: application/json
+
+{
+  "subject": "Hello, Afonso!",
+  "body": "This is a test email."
+}
