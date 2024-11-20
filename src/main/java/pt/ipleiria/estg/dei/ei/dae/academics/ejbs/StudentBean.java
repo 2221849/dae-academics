@@ -2,6 +2,7 @@ package pt.ipleiria.estg.dei.ei.dae.academics.ejbs;
 
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
 import jakarta.persistence.PersistenceContext;
@@ -12,6 +13,7 @@ import pt.ipleiria.estg.dei.ei.dae.academics.entities.Student;
 import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityNotFoundException;
+import pt.ipleiria.estg.dei.ei.dae.academics.security.Hasher;
 
 import java.util.List;
 
@@ -27,6 +29,9 @@ public class StudentBean {
     @EJB
     private SubjectBean subjectBean;
 
+    @Inject
+    private Hasher hasher;
+
     public boolean exists(String username) {
         Query query = entityManager.createQuery(
                 "SELECT COUNT(s.username) FROM Student s WHERE s.username = :username",
@@ -36,21 +41,25 @@ public class StudentBean {
         return (Long) query.getSingleResult() > 0L;
     }
 
-    public void create(String username, String password, String name, String email, long code) throws MyEntityExistsException, MyEntityNotFoundException, MyConstraintViolationException {
+    public Student create(String username, String password, String name, String email, long code) throws MyEntityExistsException, MyEntityNotFoundException, MyConstraintViolationException {
         if (exists(username)) {
             throw new MyEntityExistsException("Student with username '" + username + "' already exists");
         }
 
         var course = courseBean.find(code);
+        Student student = null;
 
         try {
-            var student = new Student(username, password, name, email, course);
-            course.addStudent(student);
+            student = new Student(username, hasher.hash(password), name, email, course);
             entityManager.persist(student);
             entityManager.flush();
         } catch (ConstraintViolationException e) {
             throw new MyConstraintViolationException(e);
         }
+
+        course.addStudent(student);
+
+        return student;
     }
 
     public List<Student> findAll() {
@@ -76,7 +85,7 @@ public class StudentBean {
 
         entityManager.lock(student, LockModeType.OPTIMISTIC);
 
-        student.setPassword(password);
+        student.setPassword(hasher.hash(password));
         student.setName(name);
         student.setEmail(email);
 

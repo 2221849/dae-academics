@@ -17,10 +17,12 @@ public class Hasher {
         try {
             ByteBuffer passwdBuffer = Charset.defaultCharset().encode(CharBuffer.wrap(content));
             byte[] passwdBytes = passwdBuffer.array();
+
             MessageDigest mdEnc = MessageDigest.getInstance("SHA-256");
+
             mdEnc.update(passwdBytes, 0, content.toCharArray().length);
-            char[] encoded = new BigInteger(1,
-                    mdEnc.digest()).toString(16).toCharArray();
+
+            char[] encoded = new BigInteger(1, mdEnc.digest()).toString(16).toCharArray();
             return new String(encoded);
         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(User.class.getName()).severe(ex.getMessage());

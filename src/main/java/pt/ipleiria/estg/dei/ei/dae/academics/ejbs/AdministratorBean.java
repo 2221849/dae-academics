@@ -1,12 +1,14 @@
 package pt.ipleiria.estg.dei.ei.dae.academics.ejbs;
 
 import jakarta.ejb.Stateless;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Administrator;
 import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityNotFoundException;
+import pt.ipleiria.estg.dei.ei.dae.academics.security.Hasher;
 
 import java.util.List;
 
@@ -15,6 +17,9 @@ public class AdministratorBean {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Inject
+    private Hasher hasher;
 
     public boolean exists(String username) {
         Query query = entityManager.createQuery(
@@ -25,13 +30,15 @@ public class AdministratorBean {
         return (Long)query.getSingleResult() > 0L;
     }
 
-    public void create(String username, String password, String name, String email) throws MyEntityExistsException {
+    public Administrator create(String username, String password, String name, String email) throws MyEntityExistsException {
         if (exists(username)) {
             throw new MyEntityExistsException("Administrator with username '" + username + "' already exists");
         }
 
-        var administrator = new Administrator(username, password, name, email);
+        var administrator = new Administrator(username, hasher.hash(password), name, email);
         entityManager.persist(administrator);
+
+        return administrator;
     }
 
     public Administrator find(String username) throws MyEntityNotFoundException {
@@ -50,7 +57,7 @@ public class AdministratorBean {
         var administrator = this.find(username);
 
         administrator.setUsername(name);
-        administrator.setPassword(password);
+        administrator.setPassword(hasher.hash(password));
         administrator.setEmail(email);
     }
 

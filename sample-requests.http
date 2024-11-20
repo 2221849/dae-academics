@@ -1,6 +1,4 @@
 
-// Student Requests
-
 ### Retrieve All Students
 GET http://localhost:8080/academics/api/student
 Accept: application/json
@@ -38,8 +36,6 @@ DELETE http://localhost:8080/academics/api/student/2222184
 ### Retrieve Student's Subjects
 GET http://localhost:8080/academics/api/student/2221842/subjects
 
-// Course Requests
-
 ### Retrieve All Courses
 GET http://localhost:8080/academics/api/course
 Accept: application/json
@@ -67,8 +63,6 @@ Accept: application/json
 
 ### Delete Course
 DELETE http://localhost:8080/academics/api/course/9123
-
-// Subject Requests
 
 ### Retrieve All Subjects
 GET http://localhost:8080/academics/api/subject
@@ -110,8 +104,6 @@ GET http://localhost:8080/academics/api/subject/37/students
 ### Retrieve Teachers Associated to a Subject
 GET http://localhost:8080/academics/api/subject/37/teachers
 
-// Teacher Requests
-
 ### Retrieve All Teachers
 GET http://localhost:8080/academics/api/teacher
 Accept: application/json
@@ -149,8 +141,6 @@ DELETE http://localhost:8080/academics/api/teacher/dulce.goncalves
 ### Retrieve Subjects Teacher Is Associated To
 GET http://localhost:8080/academics/api/teacher/carlos.j.ferreira/subjects
 
-// Administrator Requests
-
 ### Retrieve All Administrators
 GET http://localhost:8080/academics/api/administrator
 Accept: application/json
@@ -182,8 +172,6 @@ Accept: application/json
 
 ### Delete Administrator
 DELETE http://localhost:8080/academics/api/administrator/admin.jdoe
-
-// Exception Testing
 
 ### Attempt to Retrieve a Student That Does Not Exist
 GET http://localhost:8080/academics/api/student/2220000
@@ -220,8 +208,6 @@ Accept: application/json
 ### Attempt to Delete an Administrator That Does Not Exist
 DELETE http://localhost:8080/academics/api/administrator/nonexistent.admin
 
-// Email Testing
-
 ### Test Email
 POST http://localhost:8080/academics/api/student/2221868/email
 Content-Type: application/json
@@ -229,4 +215,49 @@ Content-Type: application/json
 {
   "subject": "Hello, Afonso!",
   "body": "This is a test email."
+}
+
+### Request JWT Token as a Student
+POST http://localhost:8080/academics/api/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "username": "2221849",
+  "password": "123456789"
+}
+
+### Get All Student as user "2221849"
+GET http://localhost:8080/academics/api/student
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiIyMjIxODQ5IiwiaWF0IjoxNzMyMDk5MzUzLCJleHAiOjE3MzIxMDI5NTN9.fn3IqRqhUZSGNfjqE2Mlzuu1ihl-VB4OhEMb8K2qPNXwEKnD1uAu-1YS2QE1rpO9
+
+### Student Retrieve his Details
+GET http://localhost:8080/academics/api/student/2221849
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiIyMjIxODQ5IiwiaWF0IjoxNzMyMDk5MzUzLCJleHAiOjE3MzIxMDI5NTN9.fn3IqRqhUZSGNfjqE2Mlzuu1ihl-VB4OhEMb8K2qPNXwEKnD1uAu-1YS2QE1rpO9
+
+### Request JWT Token as an Admin
+POST http://localhost:8080/academics/api/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "username": "admin",
+  "password": "123456789"
+}
+
+### Get All Students as user "admin"
+GET http://localhost:8080/academics/api/student
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTczMjEwMTcxNSwiZXhwIjoxNzMyMTA1MzE1fQ.tS5BHjGeTpOmlBsV_aaj1MS1a-7ji_5lP0LNjoOCWCFF8D2lOBF70QJDUNSaCNSV
+
+### Add New Course
+POST http://localhost:8080/academics/api/course
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTczMjEwMTcxNSwiZXhwIjoxNzMyMTA1MzE1fQ.tS5BHjGeTpOmlBsV_aaj1MS1a-7ji_5lP0LNjoOCWCFF8D2lOBF70QJDUNSaCNSV
+
+{
+  "code": "9123",
+  "name": "Licenciatura em Engenharia Mecânica (D)"
 }

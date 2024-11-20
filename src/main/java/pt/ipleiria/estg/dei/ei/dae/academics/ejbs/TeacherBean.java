@@ -2,6 +2,7 @@ package pt.ipleiria.estg.dei.ei.dae.academics.ejbs;
 
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
@@ -9,6 +10,7 @@ import org.hibernate.Hibernate;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Teacher;
 import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityNotFoundException;
+import pt.ipleiria.estg.dei.ei.dae.academics.security.Hasher;
 
 import java.util.List;
 
@@ -21,6 +23,9 @@ public class TeacherBean {
     @EJB
     private SubjectBean subjectBean;
 
+    @Inject
+    private Hasher hasher;
+
     public boolean exists(String username) {
         Query query = entityManager.createQuery(
                 "SELECT COUNT(t.username) FROM Teacher t WHERE t.username = :username",
@@ -30,13 +35,15 @@ public class TeacherBean {
         return (Long)query.getSingleResult() > 0L;
     }
 
-    public void create(String username, String password, String name, String email, String office) throws MyEntityExistsException {
+    public Teacher create(String username, String password, String name, String email, String office) throws MyEntityExistsException {
         if (exists(username)) {
             throw new MyEntityExistsException("Teacher with username '" + username + "' already exists");
         }
 
-        var teacher = new Teacher(username, password, name, email, office);
+        var teacher = new Teacher(username, hasher.hash(password), name, email, office);
         entityManager.persist(teacher);
+
+        return teacher;
     }
 
     public Teacher find(String username) throws MyEntityNotFoundException {
@@ -60,7 +67,7 @@ public class TeacherBean {
     public void update(String username, String password, String name, String email, String office) throws MyEntityNotFoundException {
         var teacher = this.find(username);
 
-        teacher.setPassword(password);
+        teacher.setPassword(hasher.hash(password));
         teacher.setName(name);
         teacher.setEmail(email);
         teacher.setOffice(office);
