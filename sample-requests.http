@@ -261,3 +261,8 @@ Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTczMjEwM
   "code": "9123",
   "name": "Licenciatura em Engenharia Mecânica (D)"
 }
+
+### Get User Data using Token
+GET http://localhost:8080/academics/api/auth/user
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTczMjEwMzc4NywiZXhwIjoxNzMyMTA3Mzg3fQ.UjjgRyzHkbZHeCrPMc5RvZdR9jJH8v1VbuZl-M8m9rdl7iOqsk4-zhZXjwf9tXs4
